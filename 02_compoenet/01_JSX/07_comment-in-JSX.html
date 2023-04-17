@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+    
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const style = {
+            backgroundColor : 'black',
+            color : 'white',
+            cursor : 'pointer',
+            textAlign : 'center',
+            padding : 20
+        }
+        
+        const element = (
+            <>
+                <h1 style={ style }>comment in JSX</h1>
+                {/* JSX 내에서의 주석은 이렇게 작성합니다. */}
+
+                <h3 
+                    id="text"   // 시작 태그를 여러 줄로 작성한다면 여기에도 주석 가능 
+                    className="text"
+                >JSX 내의 주석 사용하는 방법</h3>
+                
+                /* 하지만 이런 주석이나 */
+                // 이런 주석은 페이지에 바로 나타납니다. 
+            </>
+        )
+
+
+        ReactDOM.createRoot(document.getElementById('root')).render(element);
+    </script>
+</body>
+</html>

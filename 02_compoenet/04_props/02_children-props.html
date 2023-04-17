@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function ChildNodePrinter(props){
+            return (
+                <>
+                    <h1>자식 노드가 가지고 있는 값은?</h1>
+                    <h3>childred : <font style={{ color : 'orangered'}}>{props.children}</font></h3>
+                </>
+            )
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            [
+                <ChildNodePrinter name="홍길동" phone="010-0101-0101">텍스트 노드</ChildNodePrinter>,
+                <ChildNodePrinter><div>자식 노드</div></ChildNodePrinter>,
+                <ChildNodePrinter><div>1</div><div>2</div><div>3</div></ChildNodePrinter>
+            ]
+        )
+    </script>
+</body>
+</html>
