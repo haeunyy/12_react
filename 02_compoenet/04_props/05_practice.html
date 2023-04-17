@@ -27,6 +27,18 @@
             phone : '010-1234-5678',
             email : 'hong123@gmail.com'
         };
+        const user2 = {
+            name : '홍길동',
+            age : 20,
+            phone : '010-1234-5678',
+            email : 'hong123@gmail.com'
+        };
+        const user3 = {
+            name : '홍길동',
+            age : 20,
+            phone : '010-1234-5678',
+            email : 'hong123@gmail.com'
+        };
 
         function NameCard({name}) {
 
@@ -35,27 +47,30 @@
 
         function AgeCard({age}) {
 
-            return <h2>{ age }</h2>;
+            return <h2 style={ { color : 'orangered' } } >{ age }</h2>;
         }
 
         function PhoneCard({phone}) {
 
-            return <h2>{ phone }</h2>;
+            return <h2 style={ { color : 'red' } } >{ phone }</h2>;
         }
 
         function EmailCard({style, email}) {
 
-            return <h3 style={ style }>{ email }</h3>;
+            return <h3 style={ { backgroundColor : 'yellow' } }/*style={ style }*/>{ email }</h3>;
         }
 
         function UserInfo({ uesr }) {
 
             return (
                 <div style={ { width : 300, border : '1px solid black'} }>
-                    <NameCard style={ { color : 'black' } } name={ user.name }/>
-                    <AgeCard style={ { color : 'orangered' } } age={ user.age }/>
-                    <PhoneCard style={ { color : 'red' } } phone={ user.phone }/>
-                    <EmailCard style={ { backgroundColor : 'yellow' } } email={ user.email }/>
+                    <NameCard name={ user.name }/>
+                    <AgeCard age={ user.age }/>
+                    <PhoneCard phone={ user.phone }/>
+                    <EmailCard email={ user.email }/>
+                    {/* AgeCard style={ { color : 'orangered' } } 작성할 수 없는 이유 : 
+                        AgeCard props 객체에 속성을 지정할 수 없고 h2에 속성을 지정해야하기 때문에 
+                        굳이 설정이 필요하다면 style={ style }을 EmailCard함수에서 지정할 수는 있다. */}
                 </div>
             );
         }
@@ -86,7 +101,9 @@
 
         ReactDOM.createRoot(document.getElementById('root')).render(
             [
-                <UserInfo user={user}/>
+                <UserInfo user={user}/>,
+                <UserInfo user={user2}/>,
+                <UserInfo user={user3}/>
             ]    
         );
 
