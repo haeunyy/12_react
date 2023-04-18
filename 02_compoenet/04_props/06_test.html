@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테스트다 임뫄</title>
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        /* 1초마다 반영되는 전자시계 */
+        const element = (
+            <h1>현재 서울 시간 : { new Date().toLocaleTimeString() }</h1>
+        );
+
+        
+        function DateTime ({date}){
+            return ( <h1>현재 서울 시간 : { date }</h1> );
+        }
+
+        function DateTime2({ date }){
+            return ( <h1>현재 서울 시간 : { new Date().toLocaleTimeString() }</h1> );
+        }
+
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            [ 
+                <DateTime date={ new Date().toLocaleTimeString() }/>,
+                <DateTime2/>
+            ]
+        );
+        console.log(date);
+        
+        // 위의 코드 주석을 풀면 실행이 안됨.
+        // 미리 선언을 하는 이유는?
+        // const ReactDOMRoot = ReactDOM.createRoot(document.getElementById('root'));
+        
+        function liveTime(){
+
+            let time = (
+                <h1>현재 서울 시간 : { new Date().toLocaleTimeString() }</h1> 
+            );
+            ReactDOM.createRoot(document.getElementById('root')).render(time);
+
+        }
+
+
+        liveTime();
+        setInterval(liveTime, 1000);
+
+        
+    </script>
+
+
+</body>
+</html>
