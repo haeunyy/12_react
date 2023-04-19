@@ -35,7 +35,7 @@
                         <h1 style={ number < 0 ? { color : 'red' } : { color : 'blue' } }>Count : { number }</h1>
                         <button onClick={ () => this.setState({ number : number - 1 })}>-1</button>
                         <button onClick={ 
-                            () => {
+                            () => { this.setState({ number : number +1 })}} //이렇게 도 가능함 ㅋㅋ
                                 /* setState로 상태를 변경하지만 반영이 되어 있지는 않다. 
                                 메모리에만 임시로 변경 된 상태를 가지고 있으며
                                 해당 함수가 종료 되면 변경 내역을 반영한다. */
@@ -46,15 +46,15 @@
                                 // console.log(`number : ${this.state.number}`);
 
                                 /* 이러한 상황을 해결하기 위해서는 prevState를 이용한다. */
-                                this.setState((prevState, props) => {
-                                    return {
-                                        number : prevState.number + 1
-                                    };
-                                });
+                        //         this.setState((prev, props) => {
+                        //             return {
+                        //                 number : prev.number + 1
+                        //             };
+                        //         });
 
-                                this.setState(prevState => ({ number : prevState.number + 1 }));
-                            }
-                        }
+                        //         this.setState(prev => ({ number : prev.number + 1 }));
+                        //     }
+                        // }
                         >+1</button>
                     </>
                 );

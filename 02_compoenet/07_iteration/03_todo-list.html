@@ -110,10 +110,10 @@
 
             const onChangeHandler = (e, id) => {
                 // 체크박스 클릭하면 줄긋기 
-
+                console.log(e.target.value);    // on은 체크박스의 기본 value값 
                 const checkboxLine = todos.map((todo) => {
-                    if(todo.id == e.target.id) {
-                        return {...todo , isDone : checked }
+                    if(todo.id == e.target.id) {    // number 와 string을 비교할수 없기 때문에 psrsing처리를 하거나 == 비교가 가능하다. 
+                        todo.isDone = e.target.checked;     // e.target.checked의 true혹은 false 값이 대입된다. 
                 }
                 return todo;
             });
@@ -171,7 +171,6 @@
                 setTodos(updateList);      // 리스트에 추가함 
                 setInputText('');
             }
-            // const list = todos.map(item => <li key={item.id}>{item.name}</li>);
             
             return (
                 <>

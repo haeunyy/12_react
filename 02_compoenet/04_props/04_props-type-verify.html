@@ -26,22 +26,23 @@
             );
         }
 
+        /* props의 타입이 잘못 되었다거나 필수 타입이 처리되지 않았음을 콘솔을 
+        통해 알려준다. (랜더링이 되기는 함) 필수적인 설정은 아니나 큰 규모의 
+        프로젝트를 진행하거나 협업하게 되면 해당 컴포넌트에 어떤 props가 필요한지 
+        쉽게 알 수 있어 개발 능률이 좋아질 수 있다. */
         PropsVefiry.propTypes = {
-            name : PropTypes.string,
+            name : PropTypes.string, 
             favoriteNumber : PropTypes.number.isRequired
         };
 
         ReactDOM.createRoot(document.getElementById('root')).render(
             [
                 <PropsVefiry name="홍길동" favoriteNumber={ 5 }>텍스트노드</PropsVefiry>,
-                <PropsVefiry name={ 3 }>텍스트  노드</PropsVefiry>
+                <PropsVefiry name={ 3 }>텍스트노드</PropsVefiry>
             ]
         );
 
-
-
     </script>
-
 
 </body>
 </html>
