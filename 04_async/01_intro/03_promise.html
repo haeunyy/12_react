@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function increase(number) {
+        const promise = new Promise((resolve, reject) => {
+          // Promise 객체를 생성하고 내부에 수행할 로직을 작성한다.
+          setTimeout(() => {
+            const result = number + 10;
+
+            if (result > 50) {
+              const e = new Error("Number Over...");
+
+              /* 실패 시 결과를 reject로 전달 */
+              return reject(e);
+            }
+
+            /* 성공시 결과값을 resolve의 인자로 전달 */
+            resolve(result);
+          }, 1000);
+        });
+
+        return promise;
+      }
+
+      console.log(increase(0));
+
+      /* promise에서 resolve 함수로 전달한 값은 then 메소드에 전달하는 콜백함수의 매개변수를
+      이용해서 받아올 수 있다. 
+      비동기 작업을 연달아서 수행한다고 해서 콜백 지옥이 생기는 것이 아니다.
+      then 메소드를 통해 그 다음 작업을 설정해서 코드 가독성을 개선시켰다.. */
+      increase(0)
+        .then((number) => {
+          console.log(number);
+
+          return increase(number); // 처리 후 다시 promise를 리턴한다.
+        })
+        .then((number) => {
+          console.log(number);
+
+          return increase(number);
+        })
+        .then((number) => {
+          console.log(number);
+
+          return increase(number);
+        })
+        .then((number) => {
+          console.log(number);
+
+          return increase(number);
+        })
+        .then((number) => {
+          console.log(number);
+
+          return increase(number);
+        })
+        // 에러가 발생한 것을 catch가 잡는다.
+        .catch((e) => {
+          console.log(e);
+        });
+    </script>
+  </body>
+</html>

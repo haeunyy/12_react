@@ -1,76 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>03</title>
-    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
-    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
-    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>03_perfomance-optimization</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
     <div id="root"></div>
-
     <script type="text/babel">
-        /* 간단한 작업을 할 때 시간이 오래 걸리는 작업을 함께 수행하는 것은 비효윻적
-        연산을 통해 나온 값을 메모리상에 저장해두고 , 해당 값이 변경되지 않을 때는 다시 
-        연산하지 않도록 한다. 연산으로 얻은 값 자체를 메모라이즈 하기 위해 사용되는
-        hook이 useMemo이다. */
-        const { useState, useMemo } = React;
+      /* 간단한 작업을 할 때 시간이 오래 걸리는 작업을 함께 수행하는 것은 비효율적! 
+        연산을 통해 나온 값을 메모리상에 저장해두고, 해당 값이 변경되지 않을 때는 
+        다시 연산하지 않도록 한다. 연산으로 얻은 값 자체를 메모라이즈 하기 위해
+        사용되는 hook이 useMemo이다. */
 
-        const hardCalculator = (number) => {
-            console.log('어려운 계산');
-            for(let i = 0; i < 999999999999; i++){
-                // blank - 시간과 비용이 드는 계산이라는 의미 
-            }
-            return number + 10000;
-        };
+      const { useState, useMemo } = React;
 
-        const easyCalculator = (number) => {
-            console.log('쉬운 계산');
-
-            return number + 1;
+      const hardCalculator = (number) => {
+        console.log("어려운 계산");
+        for (let i = 0; i < 999999999; i++) {
+          //blank - 시간과 비용이 드는 계산이라는 의미
         }
 
-        function App(){
+        return number + 10000;
+      };
 
-            const [hardNumber, serHardNumber] = useState(1);
-            const [easyNumber, serEasyNumber] = useState(1);
+      const easyCalculator = (number) => {
+        console.log("쉬운 계산");
 
-            const hardNum = useMemo(
-                () => {
-                    return hardCalculator(hardNumber);
-                }, [hardNumber] 
-            );
-            const easyNum = useMemo(
-                () => {
-                    return hardCalculator(easyNumber);
-                }, [easyNumber]
-            );
+        return number + 1;
+      };
 
-            /* 시간이 얼마 걸리지 않는 연산을 수행해서 state가 바뀔때 
-            다시 화면을 랜더링 하기 위해 해당 App 함수를 다시 호출하기 때문에 
-            hardCalculator와 easyCalculator가 둘 다 다시 수행 된다. */
-            return (
-                <>
-                    <h3>어려운 계산기</h3>
-                    <input 
-                        type="number"
-                        value={ hardNumber} // 넘버가 변할 때 마다 연산을 시킨다. 
-                        onChange={ (e) => serHardNumber(parseInt(e.target.value))}/>
-                    <span> + 10000 = { hardNum }</span>
-                    <h3>쉬운 계산기</h3>
-                    <input 
-                        type="number"
-                        value={ easyNumber} 
-                        onChange={ (e) => serEasyNumber(parseInt(e.target.value))}/>
-                    <span> + 1 = { easyNum }</span>
-                </>
-            )
-        }
+      function App() {
+        const [hardNumber, setHardNumber] = useState(1);
+        const [easyNumber, setEasyNumber] = useState(1);
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+        /* 첫번째 인자는 연산을 수행한 후 반환 받는 값을 리턴 값 형태로 작성 
+            두번째 인자는 의존성 배열이라고 하는데, 의존성 배열에 등록한 값의 
+            변화를 감지한다. 만약 빈 배열을 사용하면 아무것도 감지하지 않기 때문에 
+            첫 로딩 시에만 호출하여 값을 메모라이즈 한다. */
+        const hardNum = useMemo(() => {
+          return hardCalculator(hardNumber);
+        }, [hardNumber]);
+
+        const easyNum = useMemo(() => {
+          return easyCalculator(easyNumber);
+        }, [easyNumber]);
+
+        return (
+          <>
+            <h3>어려운 계산기</h3>
+            <input
+              type="number"
+              value={hardNumber}
+              onChange={(e) => setHardNumber(parseInt(e.target.value))}
+            />
+            <span> + 10000 = {hardNum} </span>
+
+            <h3>쉬운 계산기</h3>
+            <input
+              type="number"
+              value={easyNumber}
+              onChange={(e) => setEasyNumber(parseInt(e.target.value))}
+            />
+            <span> + 1 = {easyNum} </span>
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
     </script>
-</body>
+  </body>
 </html>

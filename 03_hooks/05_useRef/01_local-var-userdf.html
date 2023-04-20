@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>02</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /* 지역 변수(랜더링과 무관하게 변경 될 수 있는 값) 사용시 useRef의 활용 */
+      const { useState, useRef } = React;
+
+      function Counter() {
+        const [count, setCount] = useState(0);
+
+        /* 랜더링과 상관없는 변수를 사용하고 싶을 때 */
+        let variable = 0;
+        const countRef = useRef(0);
+
+        console.log("Counter rendering...");
+
+        const increaseCount = () => {
+          setCount(count + 1);
+        };
+
+        const increaseVariable = () => {
+          variable += 1;
+          console.log(`variable : ${variable}`);
+        };
+
+        const increaseCountRef = () => {
+          countRef.current = countRef.current + 1;
+          console.log(`${countRef.current}`);
+        };
+
+        return (
+          <>
+            <h1>count : {count}</h1>
+            <h1>variable : {variable}</h1>
+            <button onClick={increaseCount}>count 증가</button>
+            <button onClick={increaseVariable}>variable 증가</button>
+            <button onClick={increaseCountRef}>countRef.current 증가</button>
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Counter />);
+    </script>
+  </body>
+</html>

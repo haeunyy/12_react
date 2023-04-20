@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>02</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /* 특정 input에 포커스를 주고 싶을 경우 돔에 접근해야하는데 이를
+      위해서도 useRef를 사용할 수 있다.  */
+      const { useState, useRef } = React;
+
+      function LoginComponent() {
+        const [form, setForm] = useState({
+          username: "",
+          password: "",
+        });
+
+        const usernameRef = useRef();
+        // 랜더링 이전 동작이기 때문에 최초 출력은 undefined가 나온다.
+        console.log(usernameRef);
+
+        const onChangeHandler = (e) => {
+          console.log(...form);
+          setForm({
+            ...form,
+            [e.target.name]: e.target.value,
+          });
+        };
+
+        return (
+          <>
+            <input
+              type="text"
+              name="username"
+              ref={usernameRef}
+              placeholder="username"
+              value={form.username}
+              onChange={onChangeHandler}
+            />
+            <br />
+            <input
+              type="password"
+              name="password"
+              placeholder="password"
+              value={form.password}
+              onChange={onChangeHandler}
+            />
+            <br />
+            <button>로그인</button>
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <LoginComponent />
+      );
+    </script>
+  </body>
+</html>

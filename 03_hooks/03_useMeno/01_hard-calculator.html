@@ -1,48 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>01</title>
-    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
-    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
-    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>01_hard-calculator</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
     <div id="root"></div>
-
     <script type="text/babel">
+      const { useState } = React;
 
-        const { useState } = React;
-
-        const hardCalculator = (number) => {
-            console.log('어려운 계산');
-            for(let i = 0; i < 999999999999; i++){
-                // blank - 시간과 비용이 드는 계산이라는 의미 
-            }
-            return number + 10000;
+      const hardCalculator = (number) => {
+        console.log("어려운 계산");
+        for (let i = 0; i < 999999999; i++) {
+          //blank - 시간과 비용이 드는 계산이라는 의미
         }
 
-        function App(){
+        return number + 10000;
+      };
 
-            const [hardNumber, serHardNumber] = useState(1);
+      function App() {
+        const [hardNumber, setHardNumber] = useState(1);
 
-            const hardNum = hardCalculator(hardNumber);
+        const hardNum = hardCalculator(hardNumber);
 
-            return (
-                <>
-                    <h3>어려운 계산기</h3>
-                    <input 
-                        type="number"
-                        value={ hardNumber} // 넘버가 변할 때 마다 연산을 시킨다. 
-                        onChange={ (e) => serHardNumber(parseInt(e.target.value))}/>
-                    <span> + 10000 = { hardNum }</span>
-                </>
-            )
-        }
+        /* state가 업데이트 될 때마다 무거운 연산을 다시 수행하여 
+            랜더링을 다시 하게 된다. */
+        return (
+          <>
+            <h3>어려운 계산기</h3>
+            <input
+              type="number"
+              value={hardNumber}
+              onChange={(e) => setHardNumber(parseInt(e.target.value))}
+            />
+            <span> + 10000 = {hardNum} </span>
+          </>
+        );
+      }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
     </script>
-</body>
+  </body>
 </html>

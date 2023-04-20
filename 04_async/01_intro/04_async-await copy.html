@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /* Promise를 더 쉽게 사용할 수 있도록 async, awit가 ES2017(ES8) 에서 추기되었다. */
+      function increase(number) {
+        const promise = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            const result = number + 10;
+
+            if (result > 50) {
+              const e = new Error("Number Over...");
+
+              return reject(e);
+            }
+
+            resolve(result);
+          }, 1000);
+        });
+
+        return promise;
+      }
+
+      increase(0).then((number) => {
+        console.log(number);
+
+        return increase(number); // 처리 후 다시 promise를 리턴한다.
+      });
+
+      /* 함수의 선언부에 async 키워드를 이용하고 함수 내부에서pormise를 사용 할 때 await키워드를 이용한다.
+      await 키워드가 붙은 promise 호출 구문은 promise 작업이 끝날 때까지 기다리며 실행하게 된다.*/
+      // async function run() {
+      //   try {
+      //     let result = await increase(0);
+      //     console.log(result);
+
+      //     result = await increase(result);
+      //     console.log(result);
+
+      //     result = await increase(result);
+      //     console.log(result);
+
+      //     result = await increase(result);
+      //     console.log(result);
+
+      //     result = await increase(result);
+      //     console.log(result);
+
+      //     result = await increase(result);
+      //     console.log(result);
+      //   } catch (e) {
+      //     console.log(e);
+      //   }
+      // }
+
+      function run() {
+        try {
+          let result = increase(0);
+          console.log(result);
+
+          result = increase(result);
+          console.log(result);
+
+          result = increase(result);
+          console.log(result);
+
+          result = increase(result);
+          console.log(result);
+
+          result = increase(result);
+          console.log(result);
+
+          result = increase(result);
+          console.log(result);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      run();
+    </script>
+  </body>
+</html>
