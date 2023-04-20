@@ -20,19 +20,39 @@
     <div id="root"></div>
 
     <script type="text/babel">
-      function callAPI() {
+      const { useState } = React;
+
+      function callAPI({ inputText, imgUrl, setImgUrl }) {
+        const url = "https://api.github.com/emojis";
+
         axios
-          .get("https://api.github.com/emojis") // 값이 가공된 결과이기 때문에 json 과정 삭제
-          .then((res) => console.log(res.data))
+          .get(url)
+          .then((res) => {
+            setImgUrl(res.data[inputText]);
+          })
           .catch((err) => console.log(err));
+        return imgUrl;
       }
 
+      /* 검색어와 맞는 키값으로 검색하고 value가져와서 주소창에 띄운다. */
       function App() {
+        const [inputText, setInputText] = useState("");
+        const [imgUrl, setImgUrl] = useState("");
         const onClickHandler = () => {
-          callAPI();
+          setImgUrl(callAPI({ inputText, imgUrl, setImgUrl }));
         };
 
-        return <button onClick={onClickHandler}>API 요청</button>;
+        return (
+          <>
+            <input
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+            />
+            <button onClick={onClickHandler}>API 요청</button>
+            <img src={imgUrl} />
+          </>
+        );
       }
 
       ReactDOM.createRoot(document.getElementById("root")).render(<App />);
