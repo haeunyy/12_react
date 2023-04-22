@@ -48,6 +48,7 @@
               onChange={onChange}
               disabled={flipped}
             />
+            <br />
             <label htmlFor="hours">Hours</label>
             <input
               type="number"
@@ -57,24 +58,41 @@
               onChange={onChange}
               disabled={!flipped}
             />
-            <h4>
-              {flipped ? amount * 60 : amount} minute
-              {flipped ? amount : Math.round(amount / 60)} hour
-            </h4>
             <button onClick={reset}>reset</button>
             <button onClick={onFlip}>{flipped ? "true" : "false"}</button>
-            <h5>
-              flipped 변수가 false로 기본 설정이 되어있고 그렇다면 disabled=
-              flipped 으로 설정되어 있는 minute에 false인 경우 입력값이 그대로
-              출력되도록 설정을 하고 onChange하여 반전되면 true가 되므로 true일
-              때 hour의 input이 활성화 되어 amount로 출력되도록 설정하였다.
-            </h5>
           </div>
         );
       }
 
+      function KmToMiles() {
+        return <h3>Km 2 m</h3>;
+      }
+
       function App() {
-        return <></>;
+        const [index, setIndex] = React.useState("init");
+
+        const onSelect = (e) => {
+          setIndex(e.target.value);
+        };
+
+        return (
+          <div>
+            <h1>Super Converter</h1>
+            <select value={index} onChange={onSelect}>
+              <option value="init">Please select</option>
+              <option value="0">Minutes & Hours</option>
+              <option value="1">Km & Miles</option>
+            </select>
+            <br />
+            {index === "0" ? (
+              <MinutesToHours />
+            ) : index === "1" ? (
+              <KmToMiles />
+            ) : index === "init" ? (
+              <h3>Please select Your unit</h3> // init
+            ) : null}
+          </div>
+        );
       }
 
       const rrr = ReactDOM.createRoot(document.getElementById("root"));
