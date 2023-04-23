@@ -76,7 +76,7 @@
         };
 
         return (
-          <>
+          <div>
             <h1>Super Converter</h1>
             <select value={index} onChange={onSelect}>
               <option value="init">Please select</option>
@@ -89,9 +89,9 @@
             ) : index === "1" ? (
               <KmToMiles />
             ) : index === "init" ? (
-              <h3>Please select Your unit</h3> // init
+              <h3>Please select Your unit</h3> /* init */
             ) : null}
-          </>
+          </div>
         );
       }
 
