@@ -3,6 +3,7 @@ import Layout from "./layouts/Layout";
 import Main from "./pages/Main";
 import About from "./pages/About";
 import Menu from "./pages/Menu";
+import MenuDetails from "./pages/MenuDetail";
 
 function App() {
   return (
@@ -11,7 +12,10 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Main />} />
           <Route path="about" element={<About />} />
-          <Route path="menu" element={<Menu />} />
+          <Route path="menu">
+            <Route index element={<Menu />} />
+            <Route path=":menuCode" element={<MenuDetails />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
