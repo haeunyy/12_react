@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/redux@4.2.1/dist/redux.js"></script>
+    <script src="https://unpkg.com/react-redux@8.0.5/dist/react-redux.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /* 관리 대상 state가 복잡하거나 reducer함수로 관리해야 할 성격이 다른 경우
+        combine reducer를 이용할 수 있다.
+        */
+      const { Provider, useSelector, useDispatch } = ReactRedux;
+      const { combineReducers, createStore } = Redux;
+
+      /* 관리해야 할 상태들을 설정한다. */
+      const countInitState = {
+        currentCount: 0,
+      };
+
+      const activationInitState = {
+        isActivity: false,
+      };
+
+      const userInitState = {
+        name: "",
+        email: "",
+        phone: "",
+      };
+
+      /*여러 리듀서 함수를 하나의 rootReducer로 묶을 때 combineReducers를 이용한다.
+      서로 관련있는 상태 변경에 대한 로직을 각 함수로 분리하면서 관리가 수월해진다.*/
+      const rootReducer = combineReducers({
+        /* 각 이름은 원하는 명칭으로 지정가능 */
+        countReducer: (state = countInitState, action) => {
+          const { type, payload } = action;
+
+          switch (type) {
+            case "INCREMENT":
+              return {
+                currentCount: state.currentCount + payload.incrementValue,
+              };
+            case "DECREMENT":
+              return {
+                currentCount: state.currentCount - payload.decrementValue,
+              };
+            default:
+              return state;
+          }
+        },
+        activationReducer: (state = activationInitState, action) => {
+          const { type } = action;
+
+          switch (type) {
+            case "TOGGLE":
+              return {
+                isActivity: !state.isActivity,
+              };
+            default:
+              return state;
+          }
+        },
+        userReducer: (state = userInitState, action) => {
+          const { type, payload } = action;
+
+          switch (type) {
+            case "INPUT":
+              return {
+                ...state,
+                [payload.name]: payload.value,
+              };
+            default:
+              return state;
+          }
+        },
+      });
+
+      /*  store 생성 시 reducer는 하나만 사용할 수 있기 때문에 combineReducers를 이용한 rootReducer를 전달한다. */
+      const store = createStore(
+        rootReducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
+
+      /* combineReducers를 이용하는 경우 useSelector의 콜백함수의 매개변수로 rootReducer의 state가 전달 된다. 
+            해당 state에서 reducer 설정한 key 값을 통해 사용하고자 하는 state 값만 가져올 수 있다. */
+      function App() {
+        const { currentCount } = useSelector((state) => state.countReducer);
+        const { isActivity } = useSelector((state) => state.activationReducer);
+        const { name, email, phone } = useSelector(
+          (state) => state.userReducer
+        );
+
+        /* useDispatch hook을 이용하여 dispatch를 호출할 수 있다. */
+        const dispatch = useDispatch();
+
+        const increaseCount = () => {
+          dispatch({
+            type: "INCREMENT",
+            payload: { incrementValue: 1 },
+          });
+        };
+
+        const decreaseCount = () => {
+          dispatch({
+            type: "DECREMENT",
+            payload: { decrementValue: 1 },
+          });
+        };
+
+        const toggleActivation = () => {
+          dispatch({
+            type: "TOGGLE",
+          });
+        };
+
+        const onChangeHandler = (e) => {
+          dispatch({
+            type: "INPUT",
+            payload: { name: e.target.name, value: e.target.value },
+          });
+        };
+
+        return (
+          <>
+            <h1>currentCount : {currentCount}</h1>
+            <button onClick={increaseCount}>+ 1</button>
+            <button onClick={decreaseCount}>- 1</button>
+            <h1>isActivity : {isActivity.toString()}</h1>
+            <button onClick={toggleActivation}>toggle activation</button>
+            <h1>input control</h1>
+            <label>name : </label>
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={onChangeHandler}
+            />
+            <label>email : </label>
+            <input
+              type="text"
+              name="email"
+              value={email}
+              onChange={onChangeHandler}
+            />
+            <label>phone : </label>
+            <input
+              type="text"
+              name="phone"
+              value={phone}
+              onChange={onChangeHandler}
+            />
+            <h3>name : {name}</h3>
+            <h3>email : {email}</h3>
+            <h3>phone : {phone}</h3>
+          </>
+        );
+      }
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <Provider store={store}>
+          <App />
+        </Provider>
+      );
+    </script>
+  </body>
+</html>

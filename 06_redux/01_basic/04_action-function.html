@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>action funtion</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/redux@4.2.1/dist/redux.js"></script>
+    <script src="https://unpkg.com/react-redux@8.0.5/dist/react-redux.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { Provider, useSelector, useDispatch } = ReactRedux;
+      const { createStore } = Redux;
+
+      /* Ducks 패턴에 의하면 초기값, 액션 리듀서를 관련 있는 state별로 modules 폴더에 만들어
+        관리한다. */
+
+      /* 초기값 */
+      const initialState = 0;
+
+      /* 액션 */
+      /* 액션을 함수 형태로 재사용할 수 있도록 작성하여 dispatch 호출 시 인자로
+      전달할 값을 반환하는 함수를 만들어둔다. */
+
+      /* 액션 타입을 상수로 정의한다.
+      접두사는(count/) 다른 모듈과 액션값이 겹치지 않게 하기 위함이다. 
+      ex : INCREMENT, DECREMENT 변수를 재사용 해야하는 경우가 생겼을 때 count/를 
+      카테고리 처럼 상위 버전으로 사용하는 방법을 사용할 수 있다. 
+      count2/DECREMENT*/
+      // 액션 객체를 반환하는 함수를 생성
+      const INCREMENT = "count/INCREMENT";
+      const DECREMENT = "count/DECREMENT";
+
+      const increase = () => ({
+        type: INCREMENT,
+        payload: {
+          incrementValue: 1,
+        },
+      });
+      const decrease = () => ({
+        type: DECREMENT,
+        payload: {
+          decrementValue: 1,
+        },
+      });
+
+      /* 리듀서 */
+      function reducer(state = initialState, action) {
+        const { payload } = action;
+
+        switch (action.type) {
+          case INCREMENT:
+            return state + payload.incrementValue;
+          case DECREMENT:
+            return state - payload.decrementValue;
+          default:
+            return state;
+        }
+      }
+
+      /*****************
+       * App
+       * ***************/
+      function App() {
+        const count = useSelector((state) => state);
+        const dispatch = useDispatch();
+
+        const increaseCount = () => {
+          // dispatch({type: 'count/INCREMENT', payload : {incrementValue : 1}})
+          /* 사전에 정의한 액션 함수를 호출하여 반환받은 액션 객체값을 dispatch 호출시 전달한다. 
+          호출시 직접 액션객체를 리터럴로 작성하는 것보다 가독성, 재사용성이 증가한다. */
+          dispatch(increase());
+        };
+        const decreaseCount = () => {
+          dispatch(decrease());
+        };
+
+        return (
+          <>
+            <h1>Count : {count}</h1>
+            <button onClick={increaseCount}>+ 1</button>
+            <button onClick={decreaseCount}>- 1</button>
+          </>
+        );
+      }
+
+      /* 스토어 */
+      const store = createStore(reducer); // createStore함수가 스위치로직으로 만들어진 리듀서를 스토어로 저장한다.
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <Provider store={store}>
+          <App />
+        </Provider>
+      );
+    </script>
+  </body>
+</html>
