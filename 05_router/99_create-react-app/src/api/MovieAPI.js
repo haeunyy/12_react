@@ -8,7 +8,7 @@ const getDateFormat = () => {
   `;
 };
 export async function getMovieList(value) {
-  const url = `https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${API_KEY}&targetDt=20230421&weekGb=${value}`;
+  const url = `https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json?key=${API_KEY}&targetDt=${getDateFormat}&weekGb=${value}`;
 
   console.log(url);
   const res = await fetch(url);

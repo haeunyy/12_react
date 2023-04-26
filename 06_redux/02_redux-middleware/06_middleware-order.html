@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>middle-order</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/redux@4.2.1/dist/redux.js"></script>
+    <script src="https://unpkg.com/react-redux@8.0.5/dist/react-redux.js"></script>
+    <script src="https://unpkg.com/redux-actions@2.6.5/dist/redux-actions.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /* 리덕스 미들웨어 여러 개 사용 시 적용 우선순위 */
+
+      const firstMiddleware = (store) => (next) => (action) => {
+        console.log("first middleware");
+        const result = next(action);
+        return result;
+      };
+
+      const secondMiddleware = (store) => (next) => (action) => {
+        console.log("second middleware");
+        const result = next(action);
+        return result;
+      };
+
+      const thirdMiddleware = (store) => (next) => (action) => {
+        console.log("third middleware");
+        const result = next(action);
+        return result;
+      };
+
+      /* ---------------------------------------------------------------------------------- */
+      const { createActions, handleActions } = ReduxActions;
+
+      /* 초기값 */
+      const initialState = 0;
+
+      /* 액션 */
+      const INCREMENT = "count/INCREASE";
+      const DECREMENT = "count/DECREASE";
+
+      const {
+        count: { increase, decrease },
+      } = createActions({
+        [INCREMENT]: (amount = 1) => ({ incrementValue: amount }),
+        [DECREMENT]: (amount = 1) => ({ decrementValue: amount }),
+      });
+
+      /* 리듀서 */
+      const reducer = handleActions(
+        {
+          [INCREMENT]: (state, { payload: { incrementValue } }) => {
+            return state + incrementValue;
+          },
+          [DECREMENT]: (state, { payload: { decrementValue } }) => {
+            return state - decrementValue;
+          },
+        },
+        initialState
+      );
+
+      /* ---------------------------------------------------------------------------------------------- */
+
+      /*****************
+       * App
+       * ***************/
+
+      const { useSelector, useDispatch } = ReactRedux;
+
+      function App() {
+        const count = useSelector((state) => state);
+        const dispatch = useDispatch();
+
+        const increaseCount = () => {
+          // dispatch({type: 'count/INCREMENT', payload : {incrementValue : 1}})
+          /* 사전에 정의한 액션 함수를 호출하여 반환받은 액션 객체값을 dispatch 호출시 전달한다. 
+          호출시 직접 액션객체를 리터럴로 작성하는 것보다 가독성, 재사용성이 증가한다. */
+          dispatch(increase());
+        };
+        const decreaseCount = () => {
+          dispatch(decrease());
+        };
+
+        return (
+          <>
+            <h1>Count : {count}</h1>
+            <button onClick={increaseCount}>+ 1</button>
+            <button onClick={decreaseCount}>- 1</button>
+          </>
+        );
+      }
+
+      /* 스토어 */
+
+      const { Provider } = ReactRedux;
+      const { createStore, applyMiddleware } = Redux;
+
+      /* 미들웨어를 등록한 순서대로 동작하게 된다. */
+      const store = createStore(
+        reducer,
+        applyMiddleware(secondMiddleware, firstMiddleware, thirdMiddleware)
+      );
+
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <Provider store={store}>
+          <App />
+        </Provider>
+      );
+    </script>
+  </body>
+</html>
